@@ -1,6 +1,6 @@
 # SPA client side routing
 
-A Lambda@Edge Function, executed upon CloudFront's "Origin Request" behaviour, to re-write route requests for Angular Applications.
+A Lambda@Edge Function, executed upon CloudFront's "Origin Request" behavior, to re-write route requests for Angular Applications.
 
 ## Why?
 
@@ -12,9 +12,11 @@ However this aproach has a mayor disadvantage. When the CloudFront distribution 
 
 This Lambda@Edge Function rewrites Angular URI paths against /index.html.
 
-![alt text](diagram.png "Flow diagram")
+![Flow diagram](img\diagram-Flow.png "Flow diagram")
 
 The mayor advantage of this solution is that it only affects to desired origins.
+
+![Architecture diagram](img\diagram-Architecture.png "Architecture diagram")
 
 ## Lambda Function code
 
