@@ -12,11 +12,11 @@ However this aproach has a mayor disadvantage. When the CloudFront distribution 
 
 This Lambda@Edge Function rewrites Angular URI paths against /index.html.
 
-![Flow diagram](img\diagram-Flow.png "Flow diagram")
+![Flow diagram](img/diagram-Flow.png "Flow diagram")
 
 The mayor advantage of this solution is that it only affects to desired origins.
 
-![Architecture diagram](img\diagram-Architecture.png "Architecture diagram")
+![Architecture diagram](img/diagram-Architecture.png "Architecture diagram")
 
 ## Lambda Function code
 
