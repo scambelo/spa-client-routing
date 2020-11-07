@@ -1,0 +1,75 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'SPA client side routing'
+
+Resources:
+  ExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: LambdaEdgeSPA
+      AssumeRolePolicyDocument: |
+        {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "lambda.amazonaws.com",
+                  "edgelambda.amazonaws.com"
+                ]
+              },
+              "Action": "sts:AssumeRole"
+            }
+          ]
+        }
+      Description: SPA Client Routing Lambda@Edge Role 
+      Policies: 
+        - PolicyName: LambdaLogs
+          PolicyDocument: |
+            {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                  ],
+                  "Resource": "arn:aws:logs:*:*:log-group:*"
+                }
+              ]
+            }
+
+  LambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties: 
+      Code: 
+        ZipFile: |
+          'use strict';
+
+          exports.handler = (event, _context, callback) => {
+              const defaultPath = 'index.html';
+              const request = event.Records[0].cf.request;
+              const isFile = uri => /^\/.+(\.\w+$)/.test(uri);
+              if (!isFile(request.uri)) {
+                  const olduri = request.uri;
+                  request.uri = '/' + defaultPath;
+                  console.log('Request for [' + olduri + '], rewritten to [' + request.uri + ']');
+              }
+              callback(null, request);
+          };
+      FunctionName: spa-client-routing
+      Handler: index.handler
+      Role: !GetAtt ExecutionRole.Arn
+      Runtime: nodejs12.x
+
+  LambdaVersion:
+    Type: AWS::Lambda::Version
+    Properties: 
+      FunctionName: !Ref LambdaFunction
+
+Outputs:
+  LambdaVersionArn:
+    Description: Lambda Version ARN
+    Value: !Ref LambdaVersion
