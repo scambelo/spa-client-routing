@@ -47,7 +47,6 @@ Resources:
       Code: 
         ZipFile: |
           'use strict';
-
           exports.handler = (event, _context, callback) => {
               const defaultPath = 'index.html';
               const request = event.Records[0].cf.request;
