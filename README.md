@@ -40,7 +40,7 @@ exports.handler = (event, _context, callback) => {
 
 ## Deployment
 
-1. Deploy the CloudFormation Template on `us-east-1` region.
+1. Deploy the CloudFormation Template [cf-spa-routing.yml](cf-spa-routing.yml) on `us-east-1` region.
 2. Configure _Origin Request_ Behavior to call ARN of Lambda Version provided in the CloudFormation template Outputs
 
 >Alternatively it is possible to integrate this CloudFormation template in a larger stack in order to reference the lambda version ARN in the CloudFront Behavior.
@@ -59,3 +59,5 @@ Resources:
 ```
 ## Credits
 Thanks to [Paul Taylor](https://github.com/ptylr) for the function's code.
+## License
+[MIT License](LICENSE)
