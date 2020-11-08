@@ -40,10 +40,10 @@ exports.handler = (event, _context, callback) => {
 
 ## Deployment
 
-1. Deploy the CloudFormation Template [cf-spa-routing.yml](cf-spa-routing.yml) on `us-east-1` region.
-2. Configure _Origin Request_ Behavior to call ARN of Lambda Version provided in the CloudFormation template Outputs
+1. Deploy the CloudFormation Template [cf-spa-routing.yml](cf-spa-routing.yml) as a new stack on `us-east-1` region.
+2. In the CloudFront distribution configure _Origin Request_ event for the desired behavior (usually Default) to include the ARN of the Lambda Version provided in the CloudFormation stack Outputs.
 
->Alternatively it is possible to integrate this CloudFormation template in a larger stack in order to reference the lambda version ARN in the CloudFront Behavior.
+>Alternatively it is possible to integrate this CloudFormation template in a larger stack in order to reference the lambda version ARN in the CloudFront distribution behavior.
 
 ```yaml
 Resources:
