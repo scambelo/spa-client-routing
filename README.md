@@ -6,15 +6,15 @@ A Lambda@Edge Function, executed upon CloudFront's _Origin Request_ behavior, to
 
 S3 origins lack the ability to route Angular requests correctly to `/index.html`. 
 
-The usual aproach to solve this problem is to configure distribution's _Custom Error responses_ in order to intercept all the 403 and 404 errors form the origin and return `index.html` file instead.
+The usual approach to solve this problem is to configure distribution's _Custom Error responses_ in order to intercept all the 403 and 404 errors from the origin and return `index.html` file instead.
 
-However this aproach has a mayor disadvantage. When the CloudFront distribution is shared with other origins, for instance an API, the _Custom Error responses_ configuration affects all of the origins. That could lead to some missfortunantes behaviors.
+However, this approach has a mayor disadvantage. When the CloudFront distribution is shared with other origins, for instance an API, the _Custom Error responses_ configuration affects all of the origins. That could lead to some misfortunes behaviors.
 
 This Lambda@Edge Function rewrites Angular URI paths against `/index.html`.
 
 ![Flow diagram](img/diagram-Flow.png "Flow diagram")
 
-The mayor advantage of this solution is that it only affects to desired origins.
+The main benefit of this solution is that it only affects to desired origins.
 
 ![Architecture diagram](img/diagram-Architecture.png "Architecture diagram")
 
@@ -40,10 +40,10 @@ exports.handler = (event, _context, callback) => {
 
 ## Deployment
 
-1. Deploy the CloudFormation Template [cf-spa-routing.yml](cf-spa-routing.yml) as a new stack on `us-east-1` region.
+1. Deploy the CloudFormation template [cf-spa-routing.yml](cf-spa-routing.yml) as a new stack on `us-east-1` region.
 2. In the CloudFront distribution configure _Origin Request_ event for the desired behavior (usually Default) to include the ARN of the Lambda Version provided in the CloudFormation stack Outputs.
 
->Alternatively it is possible to integrate this CloudFormation template in a larger stack in order to reference the lambda version ARN in the CloudFront distribution behavior.
+>Alternatively, it is possible to integrate this CloudFormation template in a larger stack in order to reference the lambda version ARN in the CloudFront distribution behavior.
 
 ```yaml
 Resources:
