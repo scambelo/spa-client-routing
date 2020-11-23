@@ -47,13 +47,21 @@ Resources:
       Code: 
         ZipFile: |
           'use strict';
+          const level = 0; // subdirectory level where index.html is located.
           exports.handler = (event, _context, callback) => {
-              const defaultPath = 'index.html';
               const request = event.Records[0].cf.request;
               const isFile = uri => /^\/.+(\.\w+$)/.test(uri);
               if (!isFile(request.uri)) {
+                  let defaultPath = '';
+                  let i;
+                  const parts = request.uri.split('/');
+                  const nparts = parts.length - 1;
+                  const limit = (level <= nparts) ? level : nparts; 
+                  for (i = 1; i <= limit; i++) {
+                      defaultPath += '/' + parts[i];
+                  }
                   const olduri = request.uri;
-                  request.uri = '/' + defaultPath;
+                  request.uri = ('/' + defaultPath + '/index.html').replace(/(\/)\/+/g, '$1');
                   console.log('Request for [' + olduri + '], rewritten to [' + request.uri + ']');
               }
               callback(null, request);

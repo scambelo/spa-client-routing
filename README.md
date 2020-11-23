@@ -25,13 +25,21 @@ The code of the Lambda Function is vastly based on the work of [Paul Taylor](htt
 
 ```javascript
 'use strict';
+const level = 0; // subdirectory level where index.html is located.
 exports.handler = (event, _context, callback) => {
-    const defaultPath = 'index.html';
     const request = event.Records[0].cf.request;
     const isFile = uri => /^\/.+(\.\w+$)/.test(uri);
     if (!isFile(request.uri)) {
+        let defaultPath = '';
+        let i;
+        const parts = request.uri.split('/');
+        const nparts = parts.length - 1;
+        const limit = (level <= nparts) ? level : nparts; 
+        for (i = 1; i <= limit; i++) {
+            defaultPath += '/' + parts[i];
+        }
         const olduri = request.uri;
-        request.uri = '/' + defaultPath;
+        request.uri = ('/' + defaultPath + '/index.html').replace(/(\/)\/+/g, '$1');
         console.log('Request for [' + olduri + '], rewritten to [' + request.uri + ']');
     }
     callback(null, request);
@@ -57,6 +65,18 @@ Resources:
               EventType: origin-request
               LambdaFunctionARN: !Ref LambdaVersion
 ```
+## Customization
+This Lambda function redirects to `/index.html` when a route is requested by default. However, there are situations where is necessary to locate `index.html` object inside a subdirectory. An example of this is having two or more Angular deployments under the same CloudFormation, for example `/app1/index.html` and `/app2/index.html`
+
+To allow this, it is possible to indicate the directory level where the `index.html` is located by setting `level` constant at the beginning of the code.
+
+Some examples to illustrate this.
+
+Config|Requested URI|Result URI
+---|---|---
+`const level = 0;`|`/foo/bar`|`/index.html`
+`const level = 1;`|`/foo/bar`|`/foo/index.html`
+`const level = 2;`|`/foo/bar`|`/foo/bar/index.html`
 ## Credits
 Thanks to [Paul Taylor](https://github.com/ptylr) for the function's code.
 ## License
