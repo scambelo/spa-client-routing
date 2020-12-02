@@ -1,4 +1,6 @@
-# SPA client side routing
+## SPA client side routing
+
+![GitHub](https://img.shields.io/github/license/scambelo/spa-client-routing)
 
 A Lambda@Edge Function, executed upon CloudFront's _Origin Request_ behavior, to re-write route requests for Angular Applications.
 
@@ -80,4 +82,4 @@ Config|Requested URI|Result URI
 ## Credits
 Thanks to [Paul Taylor](https://github.com/ptylr) for the function's code.
 ## License
-[MIT License](LICENSE)
+This project is licensed under the [MIT License](LICENSE).
